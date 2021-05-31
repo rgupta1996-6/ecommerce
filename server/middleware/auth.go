@@ -17,11 +17,11 @@ func Auth(c *fiber.Ctx) error {
 
 	fmt.Println("I am a middleware")
 	var data map[string]string
-
+	fmt.Println("Request", c.Body());
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	fmt.Println(data)
+	fmt.Println("Data:", data)
 
 	app, _ := firebase.ServiceAccount()
 	client, err := app.Auth(context.Background())
@@ -33,9 +33,17 @@ func Auth(c *fiber.Ctx) error {
 		})
 	}
 	fmt.Println("authToken data :", data["authToken"])
-	authToken, _ := client.VerifyIDToken(context.Background(), data["authToken"])
+	authToken, err := client.VerifyIDToken(context.Background(), data["authToken"])
+
+	if err != nil {
+		return err
+
+	}
 
 	AuthToken = authToken
+
+	fmt.Print("UserData:", AuthToken)
+	fmt.Print("UserData authToken:", authToken)
 
 	return c.Next()
 
@@ -44,6 +52,7 @@ func Auth(c *fiber.Ctx) error {
 func AdminCheck(c *fiber.Ctx) error {
 	fmt.Println("I am admin check middleware")
 	userData := AuthToken.Claims
+	fmt.Print("UserData from Admincheck:", userData)
 	var user model.EcomUser
 
 	database.DB.Where("email = ?", userData["email"]).First(&user)

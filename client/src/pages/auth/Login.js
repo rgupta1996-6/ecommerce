@@ -17,6 +17,8 @@ import {toast} from 'react-toastify';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { GoogleOutlined } from "@ant-design/icons";
 import axios from 'axios';
+import {Divider} from 'antd';
+import SvgIcon from '../../images/SvgIcon';
 
 function Copyright() {
   return (
@@ -36,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: 'url(https://source.unsplash.com/random/?technology)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -105,7 +107,9 @@ export default function Login({history}) {
         const {user} = result;
         const idTokenResult= user.getIdTokenResult();
 
-        createOrUpdateUser((await idTokenResult).token)
+        const token = (await idTokenResult).token
+
+        createOrUpdateUser(token)
         .then((res)=>{
           console.log(res)
           dispatch({
@@ -114,14 +118,12 @@ export default function Login({history}) {
                 name: res.data.name,
                 email: res.data.email,
                 role: res.data.role,
-                token: idTokenResult,
+                token: token,
             },
         });
         roleBasedRedirect(res.data.role);
         })
         .catch()
-
-        history.push("/user/history");
 
       }catch(error){
 
@@ -154,7 +156,6 @@ export default function Login({history}) {
             roleBasedRedirect(res.data.role);
             })
             .catch()
-            history.push("/user/history");
         })
         .catch((err)=>{
             console.log(err);
@@ -211,18 +212,20 @@ export default function Login({history}) {
             >
               Sign In
             </Button>
+            <Divider plain>OR</Divider>
             </form> 
             <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              className={classes.submitGoogle}
-              startIcon={<GoogleOutlined />}
-              onClick={googleLogin}
-            >
-              Sign In With Google
-            </Button>
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="default"
+            className={classes.googleSubmit}
+            startIcon = {<SvgIcon component={SvgIcon} />}
+            className={classes.submitGoogle}
+            onClick={googleLogin}
+          >
+            Sign Up with Google
+          </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="/forgotPassword" variant="body2">

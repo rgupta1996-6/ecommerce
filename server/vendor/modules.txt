@@ -26,6 +26,19 @@ firebase.google.com/go/v4/storage
 # github.com/andybalholm/brotli v1.0.2
 ## explicit
 github.com/andybalholm/brotli
+# github.com/cloudinary/cloudinary-go v1.1.0
+## explicit
+github.com/cloudinary/cloudinary-go
+github.com/cloudinary/cloudinary-go/api
+github.com/cloudinary/cloudinary-go/api/admin
+github.com/cloudinary/cloudinary-go/api/admin/metadata
+github.com/cloudinary/cloudinary-go/api/admin/search
+github.com/cloudinary/cloudinary-go/api/uploader
+github.com/cloudinary/cloudinary-go/config
+github.com/cloudinary/cloudinary-go/logger
+github.com/cloudinary/cloudinary-go/transformation
+# github.com/creasty/defaults v1.5.1
+github.com/creasty/defaults
 # github.com/go-sql-driver/mysql v1.6.0
 github.com/go-sql-driver/mysql
 # github.com/gofiber/fiber/v2 v2.9.0
@@ -57,12 +70,22 @@ github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
+# github.com/google/uuid v1.2.0
+github.com/google/uuid
 # github.com/googleapis/gax-go/v2 v2.0.5
 github.com/googleapis/gax-go/v2
+# github.com/gosimple/slug v1.9.0
+## explicit
+github.com/gosimple/slug
+# github.com/jinzhu/gorm v1.9.16
+## explicit
 # github.com/jinzhu/inflection v1.0.0
 github.com/jinzhu/inflection
 # github.com/jinzhu/now v1.1.2
 github.com/jinzhu/now
+# github.com/joho/godotenv v1.3.0
+## explicit
+github.com/joho/godotenv
 # github.com/jstemmer/go-junit-report v0.9.1
 github.com/jstemmer/go-junit-report
 github.com/jstemmer/go-junit-report/formatter
@@ -72,6 +95,8 @@ github.com/jstemmer/go-junit-report/parser
 github.com/klauspost/compress/flate
 github.com/klauspost/compress/gzip
 github.com/klauspost/compress/zlib
+# github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be
+github.com/rainycape/unidecode
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
 # github.com/valyala/fasthttp v1.24.0

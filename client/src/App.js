@@ -14,11 +14,16 @@ import 'antd/dist/antd.css';
 import CompleteSignUp from './pages/auth/CompleteRegistration';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import axios from 'axios';
-import { History } from './pages/user/History';
+import History  from './pages/user/History';
 import LoginRoute from './components/routes/LoginRoute';
 import UpdatePassword from './pages/user/UpdatePassword';
 import AdminRoute from './components/routes/AdminRoute';
 import AdminDashboard from './pages/admin/Dashboard';
+import CategoryCreate from './pages/admin/category/CategoryCreate';
+import CategoryUpdate from './pages/admin/category/CategoryUpdate';
+import SubCreate from './pages/admin/sub/SubCreate';
+import SubUpdate from './pages/admin/sub/SubUpdate';
+import ProductCreate from './pages/admin/products/ProductCreate';
 
 
 const currentUser = async(authToken) =>{
@@ -41,8 +46,9 @@ const App= () => {
 
       if(user){
         const idTokenResult= await user.getIdTokenResult();
+        const token = idTokenResult.token
         console.log("User:",idTokenResult.token);
-        currentUser(idTokenResult.token)
+        currentUser(token)
         .then((res)=>{
           dispatch({
             type: "LOGGED_IN_USER",
@@ -50,7 +56,7 @@ const App= () => {
                 name: res.data.name,
                 email: res.data.email,
                 role: res.data.role,
-                token: idTokenResult,
+                token: token,
             },
         });
         })
@@ -78,6 +84,11 @@ const App= () => {
         <UserRoute path = "/user/history" exact component={History}/>
         <UserRoute path = "/user/updatepassword" exact component={UpdatePassword}/>
         <AdminRoute path = "/admin/dashboard" exact component={AdminDashboard}/>
+        <AdminRoute path = "/admin/category" exact component={CategoryCreate}/>
+        <AdminRoute path = "/admin/category/:slug" exact component={CategoryUpdate}/>
+        <AdminRoute path = "/admin/sub" exact component={SubCreate}/>
+        <AdminRoute path = "/admin/subcategory/:slug" exact component={SubUpdate}/>
+        <AdminRoute path = "/admin/product" exact component={ProductCreate}/>
       </Switch>
      </BrowserRouter>
     </div>

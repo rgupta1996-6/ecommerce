@@ -19,8 +19,8 @@ const AdminRoute = ({ children, ...rest}) => {
 
   useEffect(()=>{
       if (user && user.token){
-          console.log("Admin:",user.token.token);
-          currentAdmin(user.token.token)
+          console.log("Admin:",user.token);
+          currentAdmin(user.token)
           .then((res)=>{
               console.log("current admin :",res)
               setOk(true)

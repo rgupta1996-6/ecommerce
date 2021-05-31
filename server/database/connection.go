@@ -12,13 +12,15 @@ var DB *gorm.DB
 
 func Connect() {
 
-	connection, err := gorm.Open(mysql.Open("root:Current-Root-Password@tcp(localhost:3306)/sys?parseTime=true"), &gorm.Config{})
+	connection, err := gorm.Open(mysql.Open("root:Current-Root-Password@tcp(localhost:3306)/sys?parseTime=true"), &gorm.Config{
+		SkipDefaultTransaction: true,
+	})
 
 	if err != nil {
 		fmt.Errorf("Could not connect to database")
 	}
 	fmt.Println("Connected to database")
 	DB = connection
-	connection.AutoMigrate(&model.EcomUser{})
-
+	//connection.Migrator().DropTable(&model.EcomUser{}, &model.Category{}, &model.SubCategory{}, &model.Product{}, &model.Image{})
+	connection.AutoMigrate(&model.EcomUser{}, &model.Category{}, &model.SubCategory{}, &model.Product{}, &model.Image{})
 }

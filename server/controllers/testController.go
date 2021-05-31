@@ -25,11 +25,13 @@ func CreateOrUpdateUser(c *fiber.Ctx) error {
 		Email:   userData["email"].(string),
 		Address: "xyz lane,India",
 	}
+	updatedUser := model.EcomUser{}
 	res := database.DB.Create(&user)
 
 	if res.Error != nil {
-		fmt.Println("User Updated", user)
-		return c.JSON(user)
+		database.DB.Where("email=?", userData["email"]).First(&updatedUser)
+		fmt.Println("User Updated", updatedUser)
+		return c.JSON(updatedUser)
 	}
 	fmt.Println("User Created", user)
 	return c.JSON(user)

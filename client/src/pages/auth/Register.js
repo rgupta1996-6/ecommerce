@@ -10,16 +10,20 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { auth } from '../../firebase';
+import { auth,googleAuthProvider } from '../../firebase';
 import { toast } from 'react-toastify';
+import {Divider} from 'antd';
+import SvgIcon from '../../images/SvgIcon';
+import {useDispatch} from 'react-redux';
+import axios from 'axios';
 
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        React Ecommerce
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -45,16 +49,39 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  googleSubmit: {
+    margin: theme.spacing(3, 0, 2),
+    marginTop: theme.spacing(-1)
+  },
 }));
 
-export default function SignUp() {
+const createOrUpdateUser = async(authToken) => {
+
+  return await axios.post(process.env.REACT_APP_API,{
+    authToken:authToken
+  },
+  )
+  
+  }
+
+export default function SignUp({history}) {
   const classes = useStyles();
+  let dispatch= useDispatch();
 
   const [firstName,setFirstName]=useState("");
   const [lastName,setLastName] = useState("");
   const [emailID,setEmailID] = useState("");
 
 
+  const roleBasedRedirect = (role) => {
+
+    if(role === "subscriber") {
+      history.push("/user/history");
+    }else if(role === "admin"){
+      history.push("/admin/dashboard")
+    }
+  
+  }
 
   const onFormSubmit = async (e) => {
 
@@ -89,6 +116,34 @@ export default function SignUp() {
     ? setEmailID(event.target.value)
     : console.log("error")
   };
+
+  const googleLogin = () => {
+
+    auth.signInWithPopup(googleAuthProvider)
+    .then(async(result) => {
+        const { user } = result;
+        const idTokenResult = await user.getIdTokenResult();
+        createOrUpdateUser(idTokenResult.token)
+        .then((res)=>{
+          console.log(res);
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload:{
+                name: res.data.name,
+                email: res.data.email,
+                token: idTokenResult,
+                role: res.data.role,
+            },
+        });
+        roleBasedRedirect(res.data.role);
+        })
+        .catch()
+    })
+    .catch((err)=>{
+        console.log(err);
+    toast.error(err.message);
+    });
+};
  
 
 
@@ -155,6 +210,20 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
+          <Divider plain>OR</Divider>
+          </form>
+
+        <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="default"
+            className={classes.googleSubmit}
+            startIcon = {<SvgIcon component={SvgIcon} />}
+            onClick={googleLogin}
+          >
+            Sign Up with Google
+          </Button>
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="/login" variant="body2">
@@ -162,7 +231,6 @@ export default function SignUp() {
               </Link>
             </Grid>
           </Grid>
-        </form>
       </div>
       <Box mt={5}>
         <Copyright />
