@@ -16,8 +16,8 @@ var AuthToken *auth.Token
 func Auth(c *fiber.Ctx) error {
 
 	fmt.Println("I am a middleware")
-	var data map[string]string
-	fmt.Println("Request", c.Body());
+	var data map[string]interface{}
+	fmt.Println("Request", c.Body())
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func Auth(c *fiber.Ctx) error {
 		})
 	}
 	fmt.Println("authToken data :", data["authToken"])
-	authToken, err := client.VerifyIDToken(context.Background(), data["authToken"])
+	authToken, err := client.VerifyIDToken(context.Background(), data["authToken"].(string))
 
 	if err != nil {
 		return err

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const createProduct = async(authToken,title,description,price,quantity,brand,shipping,color,category,subCategory) => {
+export const createProduct = async(authToken,title,description,price,quantity,brand,shipping,color,category,subCategory,images) => {
 
     return await axios.post(`${process.env.REACT_APP_DEFAULT}/admin/product`,{
         authToken: authToken,
@@ -12,7 +12,8 @@ export const createProduct = async(authToken,title,description,price,quantity,br
         shipping,
         color,
         category,
-        subCategory
+        subCategory,
+        images
  });
 
 };

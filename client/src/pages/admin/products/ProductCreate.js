@@ -5,6 +5,7 @@ import { createProduct } from "../../../functions/product";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { getCategories } from "../../../functions/category";
+import FileUpload from "../../../images/FileUpload";
 
 const initialState = {
   title: "",
@@ -13,7 +14,7 @@ const initialState = {
   categories: [],
   category: "",
   subs: [],
-  subCategory:"",
+  subCategory: "",
   shipping: "",
   quantity: "",
   images: [],
@@ -25,7 +26,8 @@ const initialState = {
 
 const ProductCreate = () => {
   const [values, setValues] = useState(initialState);
-  const [sub,setSub]= useState([]);
+  const [sub, setSub] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // redux
   const { user } = useSelector((state) => ({ ...state }));
@@ -52,7 +54,7 @@ const ProductCreate = () => {
     brands,
     color,
     brand,
-    subCategory
+    subCategory,
   } = values;
 
   const handleSubmit = (e) => {
@@ -68,11 +70,14 @@ const ProductCreate = () => {
       color,
       category,
       subCategory,
+      images
     )
       .then((res) => {
         console.log(res);
         toast.success("Product created successfully");
-        setTimeout(function(){window.location.reload();},3000);
+        setTimeout(function () {
+          window.location.reload();
+        }, 3000);
       })
       .catch((err) => {
         console.log(err);
@@ -82,20 +87,22 @@ const ProductCreate = () => {
   };
 
   const handleChange = (e) => {
-    
     setValues({ ...values, [e.target.name]: e.target.value });
     console.log(e.target.name, " ----- ", e.target.value);
-    e.target.name === "category" && selected(e.target.value)
-    console.log(sub)
+    e.target.name === "category" && selected(e.target.value);
+    console.log(sub);
   };
 
   const selected = (id) => {
-    console.log("inside selected id:",id);
-      categories.filter(function(el){
-         return el.ID == id
-
-     }).map((c)=>{ setSub(c.SubCategories)})   
-  }
+    console.log("inside selected id:", id);
+    categories
+      .filter(function (el) {
+        return el.ID == id;
+      })
+      .map((c) => {
+        setSub(c.SubCategories);
+      });
+  };
 
   return (
     <>
@@ -108,7 +115,7 @@ const ProductCreate = () => {
             <AdminNav />
           </div>
 
-          <div className="col-md-10" style={{padding:"20px"}}>
+          <div className="col-md-10" style={{ padding: "20px" }}>
             <h4>Product create</h4>
             <hr />
 
@@ -124,7 +131,6 @@ const ProductCreate = () => {
                   autoFocus
                 />
               </div>
-
               <div className="col-md-6  form-group">
                 <label>Price</label>
                 <input
@@ -135,7 +141,6 @@ const ProductCreate = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div className="col-md-12 form-group">
                 <label>Description</label>
                 <input
@@ -146,7 +151,6 @@ const ProductCreate = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div className="col-md-6 form-group">
                 <label>Shipping</label>
                 <select
@@ -159,7 +163,6 @@ const ProductCreate = () => {
                   <option value="Yes">Yes</option>
                 </select>
               </div>
-
               <div className="col-md-6 form-group">
                 <label>Quantity</label>
                 <input
@@ -170,7 +173,6 @@ const ProductCreate = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div className="col-md-6  form-group">
                 <label>Color</label>
                 <select
@@ -186,7 +188,6 @@ const ProductCreate = () => {
                   ))}
                 </select>
               </div>
-
               <div className="col-md-6 form-group">
                 <label>Brand</label>
                 <select
@@ -202,7 +203,6 @@ const ProductCreate = () => {
                   ))}
                 </select>
               </div>
-              
               <div className="col-md-6 form-group">
                 <label>Category</label>
                 <select
@@ -219,7 +219,6 @@ const ProductCreate = () => {
                     ))}
                 </select>
               </div>
-
               <div className="col-md-6 form-group">
                 <label>Sub Category</label>
                 <select
@@ -228,15 +227,28 @@ const ProductCreate = () => {
                   onChange={handleChange}
                 >
                   <option>Please select</option>
-                  { sub.map((c) => (
-                      <option key={c.ID} value={c.ID}>
-                        {c.name}
-                      </option>
-                    ))}
+                  {sub.map((c) => (
+                    <option key={c.ID} value={c.ID}>
+                      {c.name}
+                    </option>
+                  ))}
                 </select>
               </div>
-
-              <button className="btn btn-primary" style={{marginLeft:"20px"}}>Save</button>
+              <div className="col-md-6 form-group">
+              <button
+                className="btn btn-primary"
+                style={{ marginLeft: "0px" }}
+              >
+                Save
+              </button>
+              </div>
+              <div className="col-md-6 form-group">
+                <FileUpload
+                  values={values}
+                  setValues={setValues}
+                  setLoading={setLoading}
+                />
+              </div>
             </form>
           </div>
         </div>

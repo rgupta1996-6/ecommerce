@@ -29,18 +29,19 @@ type Product struct {
 	CategoryID    uint   `json:"id" gorm:"not null"`
 	SubCategoryID uint   `json:"subid" gorm:"not null"`
 	//SubCategories []SubCategory `gorm:"many2many:product_subcategories"`
-	Quantity int64 `json:"quantity"`
-	Sold     int64 `json:"sold" gorm:"default:0"`
-	//Images        []Image       `json:"image"`
-	Shipping string `json:"shipping"`
-	Color    string `json:"color"`
-	Brand    string `json:"brand"`
+	Quantity int64   `json:"quantity"`
+	Sold     int64   `json:"sold" gorm:"default:0"`
+	Images   []Image `json:"image"`
+	Shipping string  `json:"shipping"`
+	Color    string  `json:"color"`
+	Brand    string  `json:"brand"`
 	//Ratings       []Rating
 }
 
 type Image struct {
 	gorm.Model
-	Image     string `json:"image"`
+	Url       string `json:"image"`
+	PublicID  string `json:"public_id"`
 	ProductID uint   `json:"id" gorm:"not null"`
 }
 

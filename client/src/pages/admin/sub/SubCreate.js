@@ -6,12 +6,13 @@ import {
   createCategory,
   getCategories,
   deleteCategory,
+  getDeviceType,
 } from "../../../functions/category";
 import NavHeader from "../../../components/NavHeader";
 import { Divider } from 'antd';
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import {Link} from 'react-router-dom';
-import { createSubCategory, deleteSubCategory, getSubCategories } from "../../../functions/sub";
+import { createDevice, createSubCategory, deleteSubCategory, getSubCategories,getDevices } from "../../../functions/sub";
 
 const SubCreate = () => {
   const { user } = useSelector((state) => ({ ...state }));
@@ -25,25 +26,36 @@ const SubCreate = () => {
 
   useEffect(() => {
     loadCategories();
-    loadSubCategories();
   }, []);
 
+  useEffect(() => {
+    category && loadSubCategories();
+  }, [category]);
+
   const loadCategories = () =>
-    getCategories().then((c) => setCategories(c.data));
+  getDeviceType().then((c) => {
+    let obj = JSON.parse(c.data)
+    console.log(obj)
+    setCategories(obj.results);
+  })
 
     const loadSubCategories = () =>
-    getSubCategories().then((s) => setSubCategories(s.data));
+     getDevices(category).then((c) => {
+    let obj = JSON.parse(c.data)
+    console.log(obj)
+    setSubCategories(obj.results);
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // console.log(name);
     setLoading(true);
-    createSubCategory(user.token,name,category)
+    createDevice(name,category)
       .then((res) => {
         // console.log(res)
         setLoading(false);
         setName("");
-        toast.success(`"${res.data.name}" is created`);
+        toast.success("Device is created");
         loadSubCategories();
        
       })
@@ -101,7 +113,9 @@ const SubCreate = () => {
     setKeyword(e.target.value.toLowerCase());
   };
 
-  const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword);
+  console.log(category)
+
+  const searched = (keyword) => (c) => c.deviceId.toLowerCase().includes(keyword);
 
   return (
     <>
@@ -117,13 +131,13 @@ const SubCreate = () => {
           {loading ? (
             <h4 className="text-danger">Loading..</h4>
           ) : (
-            <h4>Create Sub Category</h4>
+            <h4>Add New Device</h4>
           )}
 
             <hr />
 
              <div className="form-group">
-            <label>Parent category</label>
+            <label>Device Type</label>
             <select
               name="category"
               className="form-control"
@@ -132,8 +146,8 @@ const SubCreate = () => {
               <option>Please select a parent category</option>
               {categories.length > 0 &&
                 categories.map((c) => (
-                  <option key={c.ID} value={c.ID}>
-                    {c.name}
+                  <option key={c.id} value={c.id}>
+                    {c.id}
                   </option>
                 ))}
             </select>
@@ -151,8 +165,8 @@ const SubCreate = () => {
 
           <hr />
           {subCategories.filter(searched(keyword)).map((s) => (
-            <div class="alert alert-secondary" style={{borderRadius:"5px"}} key={s.ID}>
-              {s.name}
+            <div class="alert alert-secondary" style={{borderRadius:"5px"}} key={s.id}>
+              {s.deviceId}
               <span
                 onClick={() => handleRemove(s.slug)}
                 className="btn btn-sm float-right"

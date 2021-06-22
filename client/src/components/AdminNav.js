@@ -12,26 +12,26 @@ const AdminNav = () => (
       </li>
 
       <li className="nav-item">
-        <Link to="/admin/product" className="nav-link">
-          Product
+        <Link to="/admin/destination" className="nav-link">
+          Create Destination
         </Link>
       </li>
 
       <li className="nav-item">
-        <Link to="/admin/products" className="nav-link">
-          Products
+        <Link to="/admin/forwardrules" className="nav-link">
+          Forward Rules
         </Link>
       </li>
 
       <li className="nav-item">
         <Link to="/admin/category" className="nav-link">
-          Category
+          Device Type
         </Link>
       </li>
 
       <li className="nav-item">
         <Link to="/admin/sub" className="nav-link">
-          Sub Category
+          Devices
         </Link>
       </li>
 

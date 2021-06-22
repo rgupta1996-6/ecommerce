@@ -36,3 +36,17 @@ export const createSubCategory = async(authToken,subCategory,id) =>{
     });
 
 };
+
+export const createDevice = async(name,id) =>{
+
+    return await axios.post(`${process.env.REACT_APP_DEFAULT}/add/device/${id}`,{
+        deviceId: name,
+        authToken: "hive_auth_token"
+    });
+
+};
+
+
+export const getDevices = async (id) => {
+    return await axios.get(`${process.env.REACT_APP_DEFAULT}/devices/${id}`);
+  };

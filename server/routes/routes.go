@@ -36,4 +36,16 @@ func Setup(app *fiber.App) {
 	app.Post("/admin/uploadimages", controllers.UploadImages)
 	app.Post("/admin/removeimage", controllers.RemoveImage)
 
+	//routes for devices
+	app.Post("/device", controllers.CreateDeviceType)
+	app.Post("/add/device/:id", controllers.CreateDevice)
+	app.Get("/devicetypes", controllers.ListDeviceTypes)
+	app.Get("/devices/:id", controllers.ListDevices)
+
+	//routes for destination
+	app.Post("/destinations/:id", controllers.CreateDestination)
+	app.Get("/destinations/:id", controllers.ListDestinations)
+
+	app.Post("/forwardrules/:id", controllers.CreateForwardRule)
+
 }

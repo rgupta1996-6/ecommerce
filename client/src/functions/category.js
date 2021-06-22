@@ -35,3 +35,48 @@ export const createCategory = async(authToken,category) =>{
     });
 
 };
+
+
+
+export const createDeviceType = async(name,desc) =>{
+
+    return await axios.post(`${process.env.REACT_APP_DEFAULT}/device`,{
+        id: name,
+        description: desc
+    });
+
+};
+
+export const createDestination = async(name,bucket) =>{
+
+    return await axios.post(`${process.env.REACT_APP_DEFAULT}/destinations/60c1f194654caf000a146adc`,{
+        type: "cloudant",
+        name: name,
+        configuration : {
+      bucketInterval: bucket
+    }
+    });
+
+};
+
+export const getDeviceType = async () => {
+    return await axios.get(`${process.env.REACT_APP_DEFAULT}/devicetypes`);
+  };
+
+  export const getDestinations = async () => {
+    return await axios.get(`${process.env.REACT_APP_DEFAULT}/destinations/60c1f194654caf000a146adc`);
+  };
+
+  export const createForwardRule = async(name,destination,device,eventID) =>{
+
+    return await axios.post(`${process.env.REACT_APP_DEFAULT}/forwardrules/60c1f194654caf000a146adc`,{
+        name: name,
+        destinationName: destination,
+        type: "event",
+        selector: {
+          deviceType: device,
+          eventId: eventID
+        }
+    });
+
+};

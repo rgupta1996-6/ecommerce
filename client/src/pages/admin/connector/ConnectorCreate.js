@@ -4,15 +4,15 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import {
   deleteCategory,
-  createDeviceType,
-  getDeviceType,
+  createDestination,
+  getDestinations,
 } from "../../../functions/category";
 import NavHeader from "../../../components/NavHeader";
 import { Divider } from 'antd';
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import {Link} from 'react-router-dom';
 
-const CategoryCreate = () => {
+const ConnectorCreate = () => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const [name, setName] = useState("");
@@ -20,13 +20,14 @@ const CategoryCreate = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [keyword, setKeyword] = useState("");
-
+  const [bucketValue, setBucketValue] = useState("");
+ const bucket = ["DAY","WEEK","MONTH"]
   useEffect(() => {
-    loadCategories();
+    loadDestinations();
   }, []);
 
-  const loadCategories = () =>
-    getDeviceType().then((c) => {
+  const loadDestinations = () =>
+    getDestinations().then((c) => {
       let obj = JSON.parse(c.data)
       console.log(obj)
       setCategories(obj.results);
@@ -36,14 +37,14 @@ const CategoryCreate = () => {
     e.preventDefault();
     // console.log(name);
     setLoading(true);
-    createDeviceType(name,desc)
+    createDestination(name,bucketValue)
       .then((res) => {
         console.log(res)
         setLoading(false);
         setName("");
-        setDesc("");
-        toast.success(" device is created");
-        loadCategories();
+        setBucketValue("");
+        toast.success("Destination is created");
+        loadDestinations();
       })
       .catch((err) => {
         console.log(err);
@@ -64,7 +65,7 @@ const CategoryCreate = () => {
         .then((res) => {
           setLoading(false);
           toast.error(`${slug} deleted`);
-          loadCategories();
+          loadDestinations();
         })
         .catch((err) => {
           if (err.response.status === 400) {
@@ -88,14 +89,20 @@ const CategoryCreate = () => {
           required
         />
         <br />
-        <label>Description</label>
-        <input
-          type="text"
-          className="form-control"
-          onChange={(e) => setDesc(e.target.value)}
-          value={desc}
-          required
-        />
+        <label>Bucket Interval</label>
+        <select
+              name="category"
+              className="form-control"
+              onChange={(e) => setBucketValue(e.target.value)}
+            >
+              <option>Please select a parent category</option>
+              {bucket.length > 0 &&
+                bucket.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+            </select>
         <br/>
         <button className="btn btn-outline-primary">Save</button>
       </div>
@@ -108,7 +115,7 @@ const CategoryCreate = () => {
     setKeyword(e.target.value.toLowerCase());
   };
 
-  const searched = (keyword) => (c) => c.id.toLowerCase().includes(keyword);
+  const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword);
 
   return (
       <>
@@ -127,7 +134,7 @@ const CategoryCreate = () => {
           {loading ? (
             <h4 className="text-danger">Loading..</h4>
           ) : (
-            <h4>Add New Device Type</h4>
+            <h4>Add a Destination</h4>
           )}
           <hr />
           {categoryForm()}
@@ -142,8 +149,8 @@ const CategoryCreate = () => {
 
           <hr />
           {categories.filter(searched(keyword)).map((c) => (
-            <div class="alert alert-secondary" style={{borderRadius:"5px"}} key={c.id}>
-              {c.id}
+            <div class="alert alert-secondary" style={{borderRadius:"5px"}} key={c.name}>
+              {c.name}
               <span
                 onClick={() => handleRemove(c.slug)}
                 className="btn btn-sm float-right"
@@ -164,4 +171,4 @@ const CategoryCreate = () => {
   );
 };
 
-export default CategoryCreate;
+export default ConnectorCreate;

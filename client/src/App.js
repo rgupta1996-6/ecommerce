@@ -24,6 +24,8 @@ import CategoryUpdate from './pages/admin/category/CategoryUpdate';
 import SubCreate from './pages/admin/sub/SubCreate';
 import SubUpdate from './pages/admin/sub/SubUpdate';
 import ProductCreate from './pages/admin/products/ProductCreate';
+import ConnectorCreate from './pages/admin/connector/ConnectorCreate';
+import ForwardRules from './pages/admin/connector/ForwardRules';
 
 
 const currentUser = async(authToken) =>{
@@ -89,6 +91,8 @@ const App= () => {
         <AdminRoute path = "/admin/sub" exact component={SubCreate}/>
         <AdminRoute path = "/admin/subcategory/:slug" exact component={SubUpdate}/>
         <AdminRoute path = "/admin/product" exact component={ProductCreate}/>
+        <AdminRoute path = "/admin/destination" exact component={ConnectorCreate}/>
+        <AdminRoute path = "/admin/forwardrules" exact component={ForwardRules}/>
       </Switch>
      </BrowserRouter>
     </div>

@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/cloudinary/cloudinary-go"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -21,16 +23,51 @@ func Cloudinary() *cloudinary.Cloudinary {
 
 func UploadImages(c *fiber.Ctx) error {
 
-	// var image model.Image
+	var data map[string]string
 
-	// cld:= Cloudinary()
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
 
-	// uplodedImages,err := cld.Upload.Upload()
+	cld := Cloudinary()
+	resp, err := cld.Upload.Upload(context.Background(), data["image"], uploader.UploadParams{})
 
-	return nil
+	fmt.Println("Response from cloudinary: ", resp)
+
+	if err != nil {
+		fmt.Errorf("error: %v", resp.Error)
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": resp.Error,
+		})
+
+	} else {
+		return c.JSON(resp)
+	}
+
 }
 
 func RemoveImage(c *fiber.Ctx) error {
 
-	return nil
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	cld := Cloudinary()
+	resp, err := cld.Upload.Destroy(context.Background(), uploader.DestroyParams{PublicID: data["id"]})
+
+	fmt.Println("Response from cloudinary: ", resp)
+
+	if err != nil {
+		fmt.Errorf("error: %v", resp.Error)
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": resp.Error,
+		})
+
+	} else {
+		return c.JSON(resp)
+	}
 }
