@@ -21,6 +21,8 @@ func Setup(app *fiber.App) {
 	app.Put("/admin/category/:slug", controllers.Update)
 	app.Post("/admin/category/delete/:slug", controllers.Delete)
 
+	//TEST
+
 	//routes for sub categories
 	app.Post("/admin/subcategory", controllers.CreateSub)
 	app.Get("/subcategory/:slug", controllers.ReadSub)
